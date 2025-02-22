@@ -17,14 +17,14 @@ async function connectDb() {
 
 
 const UserSchema =  new mongoose.Schema({
-    username : {type : String , required : true , unique : true },
-    password : {type : String , required : true  , minLenght : 3 , maxLength : 6},
+    username : {type : String,  required : true, unique : true },
+    password : {type : String , required : true ,  minLenght : 3 , maxLength : 6},
     firstName : {type : String  },
     lastName : {type : String }
 })
 
 UserSchema.pre('save' , function (next) {
-    let user = this;
+    let user = this; // user instances being saved
 
     // hash the password if user modified it or a new one
     if(!user.isModified('password')) return next();
@@ -42,23 +42,22 @@ UserSchema.pre('save' , function (next) {
     });
 })
 
-// UserSchema.methods.comparePassword = function (candidatePassword , cb){
-//         bcrypt.compare(candidatePassword ,this.password , (err, isMatch) => {
-//                if(err) return cb(err);
-//                cb(null , isMatch)
-//         } )
-// }
 
-const accountScehema = new mongoose.Schema({
+
+const accountSchema = new mongoose.Schema({
        userId : {
           type : mongoose.Schema.Types.ObjectId,
           ref : 'User',
           required : true
+       },
+       balance : {
+           type : Number,
+           required :true
        }
 })
 
 const User  = mongoose.model('User' , UserSchema)
-const Account = mongoose.model('Account' , accountScehema)
+const Account = mongoose.model('Account' , accountSchema)
 
 module.exports = {
     User,

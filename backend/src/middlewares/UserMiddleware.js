@@ -1,11 +1,11 @@
-const {JWT_SECRET} = require('../config')
+const {JWT} = require('../config')
 const jwt = require('jsonwebtoken');
 
 
 const UserValidate = (req, res , next) => {
     const authHeader = req.headers.authorization;
 
-    if(!authHeader || !authHeader.startWith('Bearer')){
+    if(!authHeader || !authHeader.startsWith('Bearer')){
         return res.status(400).json({
              message : "Header not provide"
         })
@@ -13,8 +13,9 @@ const UserValidate = (req, res , next) => {
 
     try {
         const payload = authHeader.split(' ')[1];
-        const decode = jwt.verify(payload , JWT_SECRET);
-       
+        
+        const decode = jwt.verify(payload , JWT.JWT_SECRET);
+        console.log(decode);
         if(decode.userId){
             req.userId = decode.userId;
             next();
